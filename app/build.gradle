@@ -1,0 +1,104 @@
+import com.dkaera.mash.buildsrc.Libs
+
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-parcelize'
+    id 'com.google.gms.google-services'
+}
+
+android {
+    compileSdk 32
+
+    defaultConfig {
+        applicationId "com.dkaera.mash"
+        minSdk 21
+        targetSdk 32
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+    }
+
+    signingConfigs {
+        // We use a bundled debug keystore, to allow debug builds from CI to be upgradable
+        debug {
+            storeFile rootProject.file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+        release {
+            storeFile file('./release.keystore')
+            keyAlias 'key0'
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildFeatures {
+        compose true
+        // Disable unused AGP features
+        buildConfig false
+        aidl false
+        renderScript false
+        resValues false
+        shaders false
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion Libs.AndroidX.Compose.version
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1,licenses/**}'
+        }
+    }
+}
+
+dependencies {
+    // Common
+    implementation Libs.AndroidX.coreKtx
+    implementation Libs.AndroidX.navigation
+    implementation Libs.AndroidX.lifecycle
+    implementation Libs.AndroidX.Activity.activityCompose
+    implementation Libs.AndroidX.ConstraintLayout.constraintLayoutCompose
+    implementation Libs.AndroidX.Compose.animation
+    implementation Libs.AndroidX.Compose.material
+    implementation Libs.AndroidX.Compose.iconsExtended
+//    implementation Libs.AndroidX.Compose.hilt
+    implementation Libs.AndroidX.Compose.toolingPreview
+    implementation Libs.AndroidX.Compose.viewModel
+    implementation Libs.AndroidX.Compose.ui
+    implementation Libs.timber
+    implementation platform(Libs.AndroidX.Google.bom)
+    implementation Libs.AndroidX.Google.analytics
+    implementation Libs.AndroidX.Google.auth
+    implementation Libs.AndroidX.Google.firestore
+
+    // Debug
+    debugImplementation Libs.AndroidX.Compose.tooling
+    debugImplementation Libs.AndroidX.Compose.uiTestManifest
+
+    // Test
+    testImplementation Libs.JUnit.junit
+    androidTestImplementation Libs.AndroidX.Test.Ext.junit
+    androidTestImplementation Libs.AndroidX.Test.Espresso.core
+    androidTestImplementation Libs.AndroidX.Compose.uiTest
+}

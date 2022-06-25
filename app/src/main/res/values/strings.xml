@@ -1,0 +1,20 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ExtraTranslation">
+    <string name="app_name">Mash</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="sign_in">SignIn</string>
+    <string name="sign_up">SignUp</string>
+    <string name="confirm_email">ConfirmEmail</string>
+    <string name="back">back</string>
+    <string name="show_password">Show Password</string>
+    <string name="hide_password">Hide Password</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="or">or</string>
+    <string name="nick_name">Nick name</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="label_collapse_records">Collapse records sheet</string>
+    <string name="label_expand_records">Expand records sheet</string>
+    <string name="from_value">From value</string>
+    <string name="history">History</string>
+    <string name="refresh">Refresh</string>
+</resources>

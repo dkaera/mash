@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "897626659490",
+    "project_id": "mash-9a8e4",
+    "storage_bucket": "mash-9a8e4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:897626659490:android:e213ab1f3e5516695f15fb",
+        "android_client_info": {
+          "package_name": "com.dkaera.mash"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "897626659490-9p2955v5bsqdgv2uj3its58579fg7d11.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dkaera.mash",
+            "certificate_hash": "a0bdb3b6f0c4be90c69d5f4c1df090807fd7fe1f"
+          }
+        },
+        {
+          "client_id": "897626659490-5gkgr4e14a48la627i1mk92c7dk73urh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOGIbGYvpsdZ2N6nfqzfkiWt5R3B-8YlE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "897626659490-5gkgr4e14a48la627i1mk92c7dk73urh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

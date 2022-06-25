@@ -1,0 +1,48 @@
+import com.dkaera.mash.buildsrc.Libs
+import com.dkaera.mash.buildsrc.Versions
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath Libs.androidGradlePlugin
+        classpath Libs.Kotlin.gradlePlugin
+        classpath Libs.googleServices
+    }
+}// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+plugins {
+    id 'com.diffplug.spotless' version '6.7.0'
+}
+
+subprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+        kotlinOptions {
+            // Treat all Kotlin warnings as errors (disabled by default)
+            allWarningsAsErrors = project.hasProperty("warningsAsErrors") ? project.warningsAsErrors : false
+            // Opt-in to experimental compose APIs
+            freeCompilerArgs += '-opt-in=kotlin.RequiresOptIn'
+
+            jvmTarget = '1.8'
+        }
+    }
+
+    apply plugin: 'com.diffplug.spotless'
+    spotless {
+        kotlin {
+            target '**/*.kt'
+            targetExclude("$buildDir/**/*.kt")
+            targetExclude('bin/**/*.kt')
+            ktlint(Versions.ktlint).userData([android: "true"])
+            licenseHeaderFile rootProject.file('spotless/copyright.kt')
+        }
+    }
+}
