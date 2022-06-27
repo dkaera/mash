@@ -6,6 +6,9 @@ Going forward, the project plans to use Clean Architecture to manage intercation
 Firebase Auth uses to keep user personal data and auth flow.
 Firebase Firestore uses to keep user data, which allows us to get user history even app was deleted from the device.
 
+Portrait/Lanscape orionation.
+Day/Night mode.
+
 ## Troubleshooting:
 If you faced with next error
 Android Gradle plugin requires Java 11 to run. You are currently using Java 1.8.
