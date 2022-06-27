@@ -2,8 +2,7 @@ package com.dkaera.mash.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.annotation.StringRes
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -11,7 +10,6 @@ import com.dkaera.mash.Graph
 import com.dkaera.mash.R
 import com.dkaera.mash.ui.dashboard.Dashboard
 import com.dkaera.mash.ui.onboarding.ConfirmEmail
-import com.dkaera.mash.ui.onboarding.OnboardingViewModel
 import com.dkaera.mash.ui.onboarding.SignIn
 import com.dkaera.mash.ui.onboarding.SignUp
 
@@ -41,31 +39,50 @@ fun NavGraphBuilder.dashboard(
 }
 
 fun NavGraphBuilder.onboarding(
+    authCompleteState: MutableState<Boolean>,
     modifier: Modifier,
     finishActivity: () -> Unit = {},
-    authComplete: () -> Unit = {},
     actions: MainActions,
 ) {
     composable(OnboardingScreens.SignIn.route) {
         BackHandler { finishActivity() }
         SignIn(
             modifier = modifier,
-            { actions.signUp(it) },
-            { email, password ->
-                Graph.onboardingViewModel.doSignIn(email, password)
-                authComplete()
-            })
+            { actions.signUp(it) }
+        ) { email, password ->
+            Graph.onboardingViewModel.doSignIn(email, password) {
+                handleAuthResult(
+                    authCompleteState,
+                    actions,
+                    it,
+                )
+            }
+        }
     }
     composable(OnboardingScreens.SignUp.route) {
         SignUp(
             modifier = modifier,
-            { actions.upPress(it) },
-            { email, password ->
-                Graph.onboardingViewModel.doSignUp(email, password)
-                authComplete()
-            })
+            { actions.upPress(it) }
+        ) { email, password ->
+            Graph.onboardingViewModel.doSignUp(email, password) {
+                handleAuthResult(
+                    authCompleteState,
+                    actions,
+                    it,
+                )
+            }
+        }
     }
     composable(OnboardingScreens.ConfirmEmail.route) { ConfirmEmail(modifier = modifier) { } }
+}
+
+private fun handleAuthResult(
+    authCompleteState: MutableState<Boolean>,
+    actions: MainActions,
+    success: Boolean
+) {
+    authCompleteState.value = success
+    actions.onboardingComplete(success)
 }
 
 enum class OnboardingScreens(

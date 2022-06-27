@@ -17,4 +17,5 @@
     <string name="from_value">From value</string>
     <string name="history">History</string>
     <string name="refresh">Refresh</string>
+    <string name="error_auth">Wrong auth data. Please try again.</string>
 </resources>

@@ -16,6 +16,7 @@
 
 package com.dkaera.mash.ui
 
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -26,6 +27,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.dkaera.mash.Graph
+import com.dkaera.mash.R
 
 @Composable
 fun NavGraph(
@@ -54,12 +56,9 @@ fun NavGraph(
             startDestination = OnboardingScreens.SignIn.route
         ) {
             onboarding(
+                onboardingComplete,
                 modifier = modifier,
                 finishActivity = finishActivity,
-                authComplete = {
-                    onboardingComplete.value = true
-                    actions.onboardingComplete()
-                },
                 actions = actions,
             )
         }
@@ -70,8 +69,14 @@ fun NavGraph(
  * Models the navigation actions in the app.
  */
 class MainActions(navController: NavHostController) {
-    val onboardingComplete: () -> Unit = {
-        navController.popBackStack()
+    val onboardingComplete: (success: Boolean) -> Unit = {
+        if (it) {
+            navController.popBackStack()
+        } else {
+            Toast
+                .makeText(navController.context, R.string.error_auth, Toast.LENGTH_SHORT)
+                .show()
+        }
     }
 
     // Used from DASHBOARD_ROUTE

@@ -10,32 +10,40 @@ class OnboardingViewModel : ViewModel() {
     private val auth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
     val currentUserState = mutableStateOf(auth.currentUser != null)
 
-    fun doSignUp(email: String, password: String) {
+    fun doSignUp(email: String, password: String, onResult: (Boolean) -> Unit) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val currentUser = auth.currentUser
                     // Sign in success, update UI with the signed-in user's information
                     Timber.d("createUserWithEmail:success $currentUser")
-                    currentUserState.value = currentUser != null
+                    val result = currentUser != null
+                    currentUserState.value = result
+                    onResult(result)
                 } else {
+                    currentUserState.value = false
                     // If sign in fails, display a message to the user.
                     Timber.w("createUserWithEmail:failure", task.exception)
+                    onResult(false)
                 }
             }
     }
 
-    fun doSignIn(email: String, password: String) {
+    fun doSignIn(email: String, password: String, onResult: (Boolean) -> Unit) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val currentUser = auth.currentUser
                     // Sign in success, update UI with the signed-in user's information
-                    Timber.d( "signInWithEmail:success $currentUser")
-                    currentUserState.value = currentUser != null
+                    Timber.d("signInWithEmail:success $currentUser")
+                    val result = currentUser != null
+                    currentUserState.value = result
+                    onResult(result)
                 } else {
+                    currentUserState.value = false
                     // If sign in fails, display a message to the user.
-                    Timber.w( "signInWithEmail:failure", task.exception)
+                    Timber.w("signInWithEmail:failure", task.exception)
+                    onResult(false)
                 }
             }
     }
