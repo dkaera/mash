@@ -48,11 +48,11 @@ class DashboardViewModel : ViewModel() {
             db.collection(this).get().addOnCompleteListener { task ->
                 task.result
                     .documents
-                    .map {
-                        val data = it.data!!
-                        NumberModel((data["number"] as Long).toInt(), data["date"] as Long)
-                    }
-                    .toList().let {
+                    .map { it.data!! }
+                    .map { NumberModel((it["number"] as Long).toInt(), it["date"] as Long) }
+                    .toList()
+                    .sortedBy { it.date }
+                    .let {
                         savedNumbersState.clear()
                         savedNumbersState.addAll(it)
                         updateSate()
