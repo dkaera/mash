@@ -27,10 +27,7 @@ class DashboardViewModel : ViewModel() {
             return Firebase.auth.currentUser?.uid
         }
 
-    var savedNumbersState = mutableStateListOf(*emptyArray<NumberModel>())
-    val numbersState: SnapshotStateList<Int> = mutableStateListOf(*emptyArray())
-
-    fun generateFibonacci() {
+    private val fibonacciNumbers: List<Int> by lazy {
         val n = 30
         var t1 = 0
         var t2 = 1
@@ -39,12 +36,11 @@ class DashboardViewModel : ViewModel() {
             t1 = t2
             t2 = sum
             sum
-        }.filter { number -> savedNumbersState.firstOrNull { number == it.number } == null }
-            .apply {
-            numbersState.clear()
-            numbersState.addAll(this)
         }
     }
+
+    val savedNumbersState = mutableStateListOf(*emptyArray<NumberModel>())
+    val numbersState: SnapshotStateList<Int> = mutableStateListOf(*emptyArray())
 
     private fun fetchHistory() {
         Timber.d("Fetch history")
@@ -96,16 +92,25 @@ class DashboardViewModel : ViewModel() {
     }
 
     private fun updateSate() {
-        generateFibonacci()
+        fibonacciNumbers
+            .filter { number -> savedNumbersState.firstOrNull { number == it.number } == null }
+            .apply {
+                numbersState.clear()
+                numbersState.addAll(this)
+            }
     }
 
     fun removeAll() {
         savedNumbersState.clear()
         updateSate()
-        userId?.apply {
-            db.collection(this)
-                .document()
-                .delete()
+        userId?.let { collectionPath ->
+            db.collection(collectionPath)
+                .get()
+                .addOnCompleteListener { task ->
+                    val batch = db.batch()
+                    task.result.documents.forEach { batch.delete(it.reference) }
+                    batch.commit()
+                }
         }
     }
 

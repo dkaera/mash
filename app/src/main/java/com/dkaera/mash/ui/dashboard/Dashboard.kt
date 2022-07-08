@@ -147,12 +147,7 @@ private fun AppBar(
         )
         IconButton(
             modifier = Modifier.align(Alignment.CenterVertically),
-            onClick = {
-                Graph.dashboardViewModel.apply {
-                    removeAll()
-                    generateFibonacci()
-                }
-            }
+            onClick = { Graph.dashboardViewModel.apply { removeAll() } }
         ) {
             Image(
                 imageVector = Icons.Filled.Refresh,
